@@ -22,14 +22,14 @@ typedef struct List_Iter List_Iter;
  *  SUCCESS on success
  *  Failed on failure
 */
-Result create(List_C **list);
+Result create_list(List_C **list);
 
 /**
  * Destory list 
  * @param list
  *      List to destory
 */
-void destroy(List_C *list);
+void destory_list(List_C *list);
 
 /**
  * Push a new value to the end of the list.
@@ -71,7 +71,7 @@ Result  _push(List_C *list, void *value, void (* dtor) (void *));
  * @param iter
  *   Iterator to node to remove.
  */
-Result remove(List_C *list, const List_Iter *iter);
+void remove(List_C *list, const List_Iter *iter);
 
 /**
  * Create a new iterator to the first node.
@@ -79,7 +79,7 @@ Result remove(List_C *list, const List_Iter *iter);
  * Note this will be NULL if the list is empty.
  *
  * @param list
- *   List to create iterator in.
+ *   List to create_list iterator in.
  *
  * @param iter
  *  Out parameter for created iterator.
@@ -94,7 +94,7 @@ Result create_iter(const List_C *list, List_Iter **iter);
  * Destroy an iterator.
  *
  * @param iter
- *   Iterator to destroy.
+ *   Iterator to destory_list.
  */
 void destroy_iter(List_Iter *iter);
 

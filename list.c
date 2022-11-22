@@ -33,7 +33,7 @@ typedef struct List_Iter
     Node *node;
 } List_Iter;
 
-Result create(List_C **list)
+Result create_list(List_C **list)
 {
     assert(list != NULL);
 
@@ -46,7 +46,7 @@ Result create(List_C **list)
     {
         // Failed to allocaten_list
         result = FAILED;
-        destroy(n_list);
+        destory_list(n_list);
         return result;
     }
 
@@ -56,7 +56,7 @@ Result create(List_C **list)
     if (n_list == NULL)
     {
         result = FAILED;
-        destroy(n_list);
+        destory_list(n_list);
         return result;
     }
     // user pointer
@@ -65,7 +65,7 @@ Result create(List_C **list)
     return result;
 }
 
-void destroy(List_C *list)
+void destory_list(List_C *list)
 {
     // if list is null return
     if (list == NULL)
@@ -176,7 +176,7 @@ Result create_iter(const List_C *list, List_Iter **iter)
     return result;
 }
 
-void destroy_iter(List_C *iter)
+void destroy_iter(List_Iter *iter)
 {
     free(iter);
 }
