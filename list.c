@@ -20,20 +20,20 @@ typedef struct Node
 /**
  * List struct store head of list.
  */
-typedef struct List_C
+typedef struct List
 {
     Node *head;
-} List_C;
+} List;
 
 /**
  * Iterator to store refrenced node
  */
-typedef struct List_Iter
+typedef struct ListIter
 {
     Node *node;
-} List_Iter;
+} ListIter;
 
-Result create_list(List_C **list)
+Result create_list(List **list)
 {
     assert(list != NULL);
 
@@ -41,7 +41,7 @@ Result create_list(List_C **list)
 
     // allocate multiple blocks of memory each of the same size all bytes is set to 1u(unisgned value with single bit 0 set)
 
-    List_C *n_list = (List_C *)calloc(sizeof(List_C), 1u);
+    List *n_list = (List *)calloc(sizeof(List), 1u);
     if (n_list == NULL)
     {
         // Failed to allocaten_list
@@ -65,7 +65,7 @@ Result create_list(List_C **list)
     return result;
 }
 
-void destory_list(List_C *list)
+void destory_list(List *list)
 {
     // if list is null return
     if (list == NULL)
@@ -94,12 +94,12 @@ void destory_list(List_C *list)
     free(list);
 }
 
-Result push(List_C *list, void *value)
+Result push(List *list, void *value)
 {
     return _push(list, value, NULL);
 }
 
-Result _push(List_C *list, void *value, void (*dtor)(void *))
+Result _push(List *list, void *value, void (*dtor)(void *))
 {
     assert(list != NULL);
 
@@ -125,7 +125,7 @@ Result _push(List_C *list, void *value, void (*dtor)(void *))
     return result;
 }
 
-void remove(List_C *list, const List_Iter *iter)
+void remove(List *list, const ListIter *iter)
 {
     assert(list != NULL);
     assert(iter != NULL);
@@ -156,13 +156,13 @@ void remove(List_C *list, const List_Iter *iter)
     }
 }
 
-Result create_iter(const List_C *list, List_Iter **iter)
+Result create_iter(const List *list, ListIter **iter)
 {
     assert(list != NULL);
     assert(iter != NULL);
 
     Result result = SUCCESS;
-    List_Iter *n_iter = (List_Iter *)calloc(sizeof(List_Iter), 1u);
+    ListIter *n_iter = (ListIter *)calloc(sizeof(ListIter), 1u);
 
     if (n_iter == NULL)
     {
@@ -176,31 +176,31 @@ Result create_iter(const List_C *list, List_Iter **iter)
     return result;
 }
 
-void destroy_iter(List_Iter *iter)
+void destroy_iter(ListIter *iter)
 {
     free(iter);
 }
 
-void next_node(List_Iter **iter)
+void next_node(ListIter **iter)
 {
     assert(*iter != NULL);
     (*iter)->node = (*iter)->node->next;
 }
 
-void reset_iter(const List_C *list, List_Iter **iter)
+void reset_iter(const List *list, ListIter **iter)
 {
     assert(*iter != NULL);
     (*iter)->node = list->head->next;
 }
 
-bool is_iter_end(List_Iter *iter)
+bool is_iter_end(ListIter *iter)
 {
     assert(iter != NULL);
 
     return iter->node == NULL;
 }
 
-void *iter_value(const List_Iter *iter)
+void *iter_value(const ListIter *iter)
 {
     assert(iter != NULL);
     return iter->node->value;

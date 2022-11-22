@@ -7,12 +7,12 @@
 /**
  * List data.
 */
-typedef struct List_C LIST_C;
+typedef struct List List;
 
 /**
  * List iterator
 */
-typedef struct List_Iter List_Iter;
+typedef struct ListIter ListIter;
 
 /**
  * Create new list
@@ -22,14 +22,14 @@ typedef struct List_Iter List_Iter;
  *  SUCCESS on success
  *  Failed on failure
 */
-Result create_list(List_C **list);
+Result create_list(List **list);
 
 /**
  * Destory list 
  * @param list
  *      List to destory
 */
-void destory_list(List_C *list);
+void destory_list(List *list);
 
 /**
  * Push a new value to the end of the list.
@@ -44,7 +44,7 @@ void destory_list(List_C *list);
  *  SUCCESS on success
 *   FAILED on failure
  */
-Result  push(List_C *list, void *value);
+Result  push(List *list, void *value);
 
 /**
  * Push a new value to the end of the list with destructor function (dtor)
@@ -60,7 +60,7 @@ Result  push(List_C *list, void *value);
  *  SUCCESS on success
 *   FAILED on failure
  */
-Result  _push(List_C *list, void *value, void (* dtor) (void *));
+Result  _push(List *list, void *value, void (* dtor) (void *));
 
 /**
  * Remove the node referenced by an iterator from a list.
@@ -71,7 +71,7 @@ Result  _push(List_C *list, void *value, void (* dtor) (void *));
  * @param iter
  *   Iterator to node to remove.
  */
-void remove(List_C *list, const List_Iter *iter);
+void remove(List *list, const ListIter *iter);
 
 /**
  * Create a new iterator to the first node.
@@ -88,7 +88,7 @@ void remove(List_C *list, const List_Iter *iter);
  *  SUCCESS on success
  *  FAILED on failure
  */
-Result create_iter(const List_C *list, List_Iter **iter);
+Result create_iter(const List *list, ListIter **iter);
 
 /**
  * Destroy an iterator.
@@ -96,7 +96,7 @@ Result create_iter(const List_C *list, List_Iter **iter);
  * @param iter
  *   Iterator to destory_list.
  */
-void destroy_iter(List_Iter *iter);
+void destroy_iter(ListIter *iter);
 
 
 /**
@@ -105,7 +105,7 @@ void destroy_iter(List_Iter *iter);
  * @param iter
  *    iterator to advance to next node.
  */
-void next_node(List_Iter **iter);
+void next_node(ListIter **iter);
 
 /**
  * Reset an iterator back to the start of the list.
@@ -116,7 +116,7 @@ void next_node(List_Iter **iter);
  * @param iter
  *   iterator to reset.
  */
-void reset_iter(const List_C *list, List_Iter **iter);
+void reset_iter(const List *list, ListIter **iter);
 
 /**
  * Check if an iterator past the end of the list
@@ -127,7 +127,7 @@ void reset_iter(const List_C *list, List_Iter **iter);
  * @returns
  *   True if iterator past the end of the list, otherwise false.
  */
-bool is_iter_end(List_Iter *iter);
+bool is_iter_end(ListIter *iter);
 
 /**
  * Get the value the iterator is referencing.
@@ -138,5 +138,5 @@ bool is_iter_end(List_Iter *iter);
  * @returns
  *   Value at iterator.
  */
-void *iter_value(const List_Iter *iter);
+void *iter_value(const ListIter *iter);
 
