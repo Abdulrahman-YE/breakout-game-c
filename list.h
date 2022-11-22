@@ -1,17 +1,18 @@
-
+#ifndef _LIST_H_
+#define _LIST_H_
 
 #include <stdbool.h>
 
-#include <result.h>
+#include "result.h"
 
 /**
  * List data.
-*/
+ */
 typedef struct List List;
 
 /**
  * List iterator
-*/
+ */
 typedef struct ListIter ListIter;
 
 /**
@@ -21,14 +22,14 @@ typedef struct ListIter ListIter;
  * @returns
  *  SUCCESS on success
  *  Failed on failure
-*/
+ */
 Result create_list(List **list);
 
 /**
- * Destory list 
+ * Destory list
  * @param list
  *      List to destory
-*/
+ */
 void destory_list(List *list);
 
 /**
@@ -42,9 +43,9 @@ void destory_list(List *list);
  *
  * @returns
  *  SUCCESS on success
-*   FAILED on failure
+ *   FAILED on failure
  */
-Result  push(List *list, void *value);
+Result push(List *list, void *value);
 
 /**
  * Push a new value to the end of the list with destructor function (dtor)
@@ -58,9 +59,9 @@ Result  push(List *list, void *value);
  *
  * @returns
  *  SUCCESS on success
-*   FAILED on failure
+ *   FAILED on failure
  */
-Result  _push(List *list, void *value, void (* dtor) (void *));
+Result _push(List *list, void *value, void (*dtor)(void *));
 
 /**
  * Remove the node referenced by an iterator from a list.
@@ -97,7 +98,6 @@ Result create_iter(const List *list, ListIter **iter);
  *   Iterator to destory_list.
  */
 void destroy_iter(ListIter *iter);
-
 
 /**
  * Advance an iterator to the next node.
@@ -140,3 +140,4 @@ bool is_iter_end(ListIter *iter);
  */
 void *iter_value(const ListIter *iter);
 
+#endif

@@ -1,3 +1,5 @@
+#ifndef _KEY_EVENT_H_
+#define _KEY_EVENT_H_
 
 /**
  * Possible key states.
@@ -9,7 +11,7 @@ typedef enum KeyState
 } KeyState;
 
 /**
- * Possible input keys 
+ * Possible input keys
  */
 typedef enum Key
 {
@@ -26,3 +28,4 @@ typedef struct KeyEvent
     KeyState key_state;
     Key key;
 } KeyEvent;
+#endif

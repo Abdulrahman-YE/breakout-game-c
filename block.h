@@ -1,3 +1,5 @@
+#ifndef _BLOCK_H_
+#define _BLOCK_H_
 
 #include "vector.h"
 
@@ -105,3 +107,5 @@ void set_block_pos_xy(Block *block, float x, float y);
  *   block to print.
  */
 void print_block(const Block *block);
+
+#endif

@@ -1,4 +1,5 @@
-
+#ifndef _WINDOW_H_
+#define _WINDOW_H_
 
 #include <stdint.h>
 
@@ -98,3 +99,5 @@ void post_render_window(const Window *window);
  *   FAILED in failure
  */
 Result draw_block_window(const Window *window, const Block *block, uint8_t r, uint8_t g, uint8_t b);
+
+#endif
