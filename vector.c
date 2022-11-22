@@ -10,7 +10,7 @@ Vector2D create_vec()
 
 Vector2D create_vec_xy(float x, float y)
 {
-    Vector2D vec = {.x=x, .y=y};
+    Vector2D vec = {.x = x, .y = y};
     return vec;
 }
 

@@ -4,10 +4,8 @@
 //                 https://www.boost.org/LICENSE_1_0.txt)                     //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <assert.h>
 #include <stdio.h>
-
 
 #include "block.h"
 #include "vector.h"
