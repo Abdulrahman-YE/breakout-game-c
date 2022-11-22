@@ -66,12 +66,12 @@ Result  _push(List *list, void *value, void (* dtor) (void *));
  * Remove the node referenced by an iterator from a list.
  *
  * @param list
- *   List to remove node from.
+ *   List to remove_node node from.
  *
  * @param iter
- *   Iterator to node to remove.
+ *   Iterator to node to remove_node.
  */
-void remove(List *list, const ListIter *iter);
+void remove_node(List *list, const ListIter *iter);
 
 /**
  * Create a new iterator to the first node.

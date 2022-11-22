@@ -125,7 +125,7 @@ Result _push(List *list, void *value, void (*dtor)(void *))
     return result;
 }
 
-void remove(List *list, const ListIter *iter)
+void remove_node(List *list, const ListIter *iter)
 {
     assert(list != NULL);
     assert(iter != NULL);
