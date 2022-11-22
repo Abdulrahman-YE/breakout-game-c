@@ -8,7 +8,6 @@
 
 #include <SDL2/SDL.h>
 
-
 typedef struct Window
 {
     SDL_Window *window;
@@ -19,10 +18,17 @@ static Result map_sdl_key(Key *key, SDL_Keycode sdl_code)
 {
     switch (sdl_code)
     {
-        case SDLK_ESCAPE: *key = ESCAPE_K; return SUCCESS;
-        case SDLK_LEFT: *key = LEFT_K; return SUCCESS;
-        case SDLK_RIGHT: *key = RIGHT_K; return SUCCESS;
-        fault: return NO_EVENT;
+    case SDLK_ESCAPE:
+        *key = ESCAPE_K;
+        return SUCCESS;
+    case SDLK_LEFT:
+        *key = LEFT_K;
+        return SUCCESS;
+    case SDLK_RIGHT:
+        *key = RIGHT_K;
+        return SUCCESS;
+    fault:
+        return NO_EVENT;
     }
 }
 
@@ -30,21 +36,19 @@ Result create_window(Window **window)
 {
     Result res = SUCCESS;
 
-    
     // Initalize SDL
     // allocate space for the window object
-    Window  *n_window = (Window *) calloc(1u, sizeof(Window));
-    if((SDL_Init(SDL_INIT_VIDEO) != 0) || (n_window == NULL)) 
+    Window *n_window = (Window *)calloc(1u, sizeof(Window));
+    if ((SDL_Init(SDL_INIT_VIDEO) != 0) || (n_window == NULL))
     {
         res = FAILED;
         destroy_window(n_window);
         return res;
     }
 
-
     // create an SDL window
-    n_window->window = SDL_CreateWindow('Breakout', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 800, SDL_WINDOW_SHOWN);
-    if(n_window->window == NULL)
+    n_window->window = SDL_CreateWindow("Breakout", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 800, SDL_WINDOW_SHOWN);
+    if (n_window->window == NULL)
     {
         res = FAILED;
         destroy_window(n_window);
@@ -53,14 +57,13 @@ Result create_window(Window **window)
 
     // create an SDL renderer
     n_window->renderer = SDL_CreateRenderer(n_window->window, -1, 0);
-    if(n_window->renderer == NULL)
+    if (n_window->renderer == NULL)
     {
         res = FAILED;
         destroy_window(n_window);
         return res;
     }
     n_window->renderer = SDL_CreateRenderer(n_window->window, -1, 0);
-    
 
     // assign the window to the user supplied pointer
     *window = n_window;
@@ -94,28 +97,27 @@ Result get_window_event(const Window *window, KeyEvent *event)
     // try and get an SDL event
     SDL_Event sdl_event;
 
-    if(SDL_PollEvent(&sdl_event) != 0u)
+    if (SDL_PollEvent(&sdl_event) != 0u)
     {
         bool is_key_mapped = false;
-        if(sdl_event.type == SDL_KEYDOWN)
+        if (sdl_event.type == SDL_KEYDOWN)
         {
             event->key_state = K_DOWN;
             is_key_mapped = true;
         }
-        else if(sdl_event.type == SDL_KEYUP)
+        else if (sdl_event.type == SDL_KEYUP)
         {
             event->key_state = K_UP;
             is_key_mapped = true;
-        } 
+        }
 
-        if(is_key_mapped)
+        if (is_key_mapped)
         {
             // if we get here then we know we had a key event (either press or release), so convert the SDL key code
-            // to our internal representation 
+            // to our internal representation
 
-            result = map_sdl_key(event->key, sdl_event.key.keysym.sym);
-
-        }   
+            result = map_sdl_key(&(event->key), sdl_event.key.keysym.sym);
+        }
     }
     return result;
 }
