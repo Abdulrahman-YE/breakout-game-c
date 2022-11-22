@@ -65,7 +65,6 @@ Result get_window_event(const Window *window, KeyEvent *event);
  *   FAILED on failure
  */
 Result pre_render_window(const Window *window);
-
 /**
  * Perform an post-render tasks.
  *
@@ -98,4 +97,4 @@ void post_render_window(const Window *window);
  *   SUCCESS on success
  *   FAILED in failure
  */
-Result draw_block_window(const Window *window, const Block *rectangle, uint8_t r, uint8_t g, uint8_t b);
+Result draw_block_window(const Window *window, const Block *block, uint8_t r, uint8_t g, uint8_t b);
