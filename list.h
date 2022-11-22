@@ -45,6 +45,23 @@ void destroy(List_C *list);
 *   FAILED on failure
  */
 Result  push(List_C *list, void *value);
+
+/**
+ * Push a new value to the end of the list with destructor function (dtor)
+ * dtor called when node is deleted or list is destroied
+ *
+ * @param list
+ *   List to add to.
+ *
+ * @param value
+ *   Value to add.
+ *
+ * @returns
+ *  SUCCESS on success
+*   FAILED on failure
+ */
+Result  _push(List_C *list, void *value, void (* dtor) (void *));
+
 /**
  * Remove the node referenced by an iterator from a list.
  *

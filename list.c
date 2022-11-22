@@ -96,7 +96,33 @@ void destroy(List_C *list)
 
 Result push(List_C *list, void *value)
 {
-    // TODO :implement
+    return _push(list, value, NULL);
+}
+
+Result _push(List_C *list, void *value, void (*dtor)(void *))
+{
+    assert(list != NULL);
+
+    Result result = SUCCESS;
+    Node *curr = list->head;
+    while (curr->next != NULL)
+    {
+        curr = curr->next;
+    }
+
+    Node *n_node = (Node *)calloc(sizeof(Node), 1u);
+
+    if (n_node == NULL)
+    {
+        // FAILED TO ALLOCATE NEW NODE
+        result = FAILED;
+        return result;
+    }
+    // Wire the new node to list
+    curr->next = n_node;
+    n_node->value = value;
+    n_node->dtor = dtor;
+    return result;
 }
 
 void remove(List_C *list, const List_Iter *iter)
@@ -145,7 +171,7 @@ Result create_iter(const List_C *list, List_Iter **iter)
         return result;
     }
     reset_iter(list, &n_iter);
-    //user pointer assign new iter
+    // user pointer assign new iter
     *iter = n_iter;
     return result;
 }
@@ -176,6 +202,6 @@ bool is_iter_end(List_Iter *iter)
 
 void *iter_value(const List_Iter *iter)
 {
-   assert(iter != NULL);
-   return iter->node->value;
+    assert(iter != NULL);
+    return iter->node->value;
 }
