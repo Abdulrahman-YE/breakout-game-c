@@ -5,4 +5,5 @@ typedef enum Result
 {
     SUCCESS,
     FAILED,
+    NO_EVENT,
 } Result;
