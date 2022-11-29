@@ -1,10 +1,8 @@
-
 #include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "list.h"
 #include "window.h"
 
@@ -97,26 +95,90 @@ static void update_ball(Entity *ball, Vector2D *ball_velocity)
     }
 }
 
+typedef struct CollosionResult
+{
+    bool overlap;
+    float shift_b_x;
+    float shift_b_y;
+} CollosionResult;
+
 /**
  * Helper function to check if two entities are colliding.
  *
- * @param entity1
+ * @param a
  *   First entity to check.
  *
- * @param entity2
+ * @param b
  *   Second entity to check.
  *
  * @returns
- *   True if entities collide, false otherwise.
+ *   TCollosionResult : (overlap : true if collosion detedted)
  */
-bool static check_collision(const Entity *entity1, const Entity *entity2)
+CollosionResult static check_collision(const Entity *a, const Entity *b)
 {
-    return (
-        (entity1->block.position.x < entity2->block.position.x + entity2->block.width) &&
-        (entity1->block.position.x + entity1->block.width > entity2->block.position.x) &&
-        (entity1->block.position.y < entity2->block.position.y + entity2->block.height) &&
-        (entity1->block.height + entity1->block.position.y > entity2->block.position.y));
+    bool overlap = false;
+    float shift_b_x, shift_b_y = 0.0f;
+
+    // b is the one that has to be displaced, and the a should remain in place.
+    if (!((a->block.position.x + a->block.width < b->block.position.x) || (b->block.position.x + b->block.width < a->block.position.x) || (a->block.position.y + a->block.height < b->block.position.y) || (b->block.position.y + b->block.height < a->block.position.y)))
+    {
+        overlap = true;
+        if ((a->block.position.x + a->block.width / 2) < (b->block.position.x + b->block.width / 2))
+        {
+            // b to the right from the center of a; shift b to the right
+            shift_b_x = (a->block.position.x + a->block.width) - b->block.position.x;
+        }
+        else
+        {
+            // b to the left from a; shift to the left
+            shift_b_x = a->block.position.x - (b->block.position.x + b->block.width);
+        }
+        if ((a->block.position.y + a->block.height / 2) < (b->block.position.y + b->block.height / 2))
+        {
+            // same for y axis
+            shift_b_y = (a->block.position.y + a->block.height) - b->block.position.y;
+        }
+        else
+        {
+            // same for y axis
+            shift_b_y = a->block.position.y - (b->block.position.y + b->block.height);
+        }
+    }
+    CollosionResult result = {overlap, shift_b_x, shift_b_y};
+    return result;
 }
+
+static void ball_rebound(Entity *ball, CollosionResult *result, Vector2D* ball_velocity)
+{
+    printf("Ball Postion : (%f,%f)\n", ball->block.position.x, ball->block.position.y);
+
+    float min_shift = abs(result->shift_b_x) < abs(result->shift_b_y) ? result->shift_b_x : result->shift_b_y;
+
+    if (abs(result->shift_b_x) == min_shift)
+    {
+        result->shift_b_y = 0.0f;
+        printf("Shift ball y = 0");
+    }
+    else
+    {
+        printf("Shift ball x = 0");
+        result->shift_b_x = 0.0f;
+    }
+    ball->block.position.x += result->shift_b_x;
+    ball->block.position.y += result->shift_b_y;
+
+    if (result->shift_b_x != 0)
+    {
+        printf("reverse ball velocity on x");
+        ball_velocity->x = -ball_velocity->x;
+    }
+    if (result->shift_b_y != 0)
+    {
+        printf("reverse ball velocity on y");
+        ball_velocity->y = -ball_velocity->y;
+    }
+}
+
 
 /**
  * Helper function to handle collisions between the ball and other entities.
@@ -149,12 +211,11 @@ static void handle_collisions(List *entities, Entity *ball, Vector2D *ball_veloc
         {
             Entity *block = (Entity *)iter_value(iter);
 
-            if (check_collision(ball, block))
+            CollosionResult result = check_collision(block, ball);
+            if (result.overlap)
             {
-                printf("Ball Postion : (%f,%f)", ball->block.position.x, ball->block.position.y);
                 remove_node(entities, iter);
-                ball_velocity->y *= -0.1f;
-
+                ball_rebound(ball, &result, ball_velocity);
                 // if we modify the list this will invalidate the iterator, so stop
                 break;
             }
@@ -166,29 +227,10 @@ static void handle_collisions(List *entities, Entity *ball, Vector2D *ball_veloc
     }
 
     // handle ball - paddle collision
-    if (check_collision(ball, paddle))
+    CollosionResult result = check_collision(paddle, ball);
+    if (result.overlap)
     {
-        printf("Ball Postion : (%f,%f)\n", ball->block.position.x, ball->block.position.y);
-        printf("Paddle Postion : (%f,%f)\n", paddle->block.position.x, paddle->block.position.y);
-        if (ball->block.position.x < paddle->block.position.x + 6.0f)
-        {
-            printf("Reverse x and y velocity by -0.5");
-
-            ball_velocity->x = -0.5f;
-            ball_velocity->y = -0.5f;
-        }
-        else if (ball->block.position.x < paddle->block.position.x + 14.0f)
-        {
-            printf("Reverse y velocity by -0.5");
-            ball_velocity->x = 0.0f;
-            ball_velocity->y = -0.5f;
-        }
-        else
-        {
-            printf("Inceease x velocity by 0.5 and Reverse y velctey by -0.5");
-            ball_velocity->x = 0.5f;
-            ball_velocity->y = -0.5f;
-        }
+       ball_rebound(ball, &result, ball_velocity); 
     }
 }
 
@@ -197,11 +239,11 @@ int main()
     printf("hello world\n");
 
     Entity paddle = {
-        .block = create_block_xy(300.0f, 780.0f, 300.0f, 20.0f), .r = 0xff, .g = 0xff, .b = 0xff};
+        .block = create_block_xy(100.0f, 780.0f, 100.0f, 20.0f), .r = 0xff, .g = 0xff, .b = 0xff};
     Entity ball = {.block = create_block_xy(420.0f, 400.0f, 10.0f, 10.0f), .r = 0xff, .g = 0xff, .b = 0xff};
 
     Vector2D paddle_velocity = create_vec();
-    Vector2D ball_velocity = create_vec_xy(0.f, 0.1f);
+    Vector2D ball_velocity = create_vec_xy(0.2f, 0.2f);
 
     List *entities = NULL;
     CHECK_SUCCESS(create_list(&entities), "failed to create entity list");
@@ -226,7 +268,7 @@ int main()
     KeyEvent event;
     bool running = true;
 
-    const float paddle_speed = 1.0f;
+    const float paddle_speed = 0.4f;
     bool left_press = false;
     bool right_press = false;
 
@@ -258,7 +300,6 @@ int main()
             else
             {
                 printf("error getting event\n");
-                exit(1);
             }
         }
 
