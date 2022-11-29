@@ -63,7 +63,6 @@ Result create_window(Window **window)
         destroy_window(n_window);
         return res;
     }
-    n_window->renderer = SDL_CreateRenderer(n_window->window, -1, 0);
 
     // assign the window to the user supplied pointer
     *window = n_window;
@@ -130,6 +129,7 @@ Result pre_render_window(const Window *window)
 
     if (SDL_SetRenderDrawColor(window->renderer, 0x0, 0x0, 0x0, 0x0) != 0)
     {
+        printf("%s",SDL_GetError());
         result = FAILED;
         return result;
     }
@@ -137,6 +137,7 @@ Result pre_render_window(const Window *window)
     if (SDL_RenderClear(window->renderer) != 0)
     {
         result = FAILED;
+         printf("Set render draw color failed");
         return result;
     }
 
