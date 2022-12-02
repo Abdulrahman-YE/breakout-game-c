@@ -129,7 +129,7 @@ Result pre_render_window(const Window *window)
 
     if (SDL_SetRenderDrawColor(window->renderer, 0x0, 0x0, 0x0, 0x0) != 0)
     {
-        printf("%s",SDL_GetError());
+        printf("%s", SDL_GetError());
         result = FAILED;
         return result;
     }
@@ -137,7 +137,7 @@ Result pre_render_window(const Window *window)
     if (SDL_RenderClear(window->renderer) != 0)
     {
         result = FAILED;
-         printf("Set render draw color failed");
+        printf("Set render draw color failed");
         return result;
     }
 

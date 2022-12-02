@@ -148,7 +148,7 @@ CollosionResult static check_collision(const Entity *a, const Entity *b)
     return result;
 }
 
-static void ball_rebound(Entity *ball, CollosionResult *result, Vector2D* ball_velocity)
+static void ball_rebound(Entity *ball, CollosionResult *result, Vector2D *ball_velocity)
 {
     printf("Ball Postion : (%f,%f)\n", ball->block.position.x, ball->block.position.y);
 
@@ -178,7 +178,6 @@ static void ball_rebound(Entity *ball, CollosionResult *result, Vector2D* ball_v
         ball_velocity->y = -ball_velocity->y;
     }
 }
-
 
 /**
  * Helper function to handle collisions between the ball and other entities.
@@ -230,7 +229,7 @@ static void handle_collisions(List *entities, Entity *ball, Vector2D *ball_veloc
     CollosionResult result = check_collision(paddle, ball);
     if (result.overlap)
     {
-       ball_rebound(ball, &result, ball_velocity); 
+        ball_rebound(ball, &result, ball_velocity);
     }
 }
 
