@@ -64,7 +64,7 @@ static void create_brick_row(List *entities, float y, uint8_t r, uint8_t g, uint
         e->g = g;
         e->b = b;
 
-        CHECK_SUCCESS(_push(entities, e, &free), "failed to add brick");
+        CHECK_SUCCESS(_push(entities, e, &free), "failed to add brick\n");
 
         x += 78.0f;
     }
@@ -157,11 +157,11 @@ static void ball_rebound(Entity *ball, CollosionResult *result, Vector2D *ball_v
     if (abs(result->shift_b_x) == min_shift)
     {
         result->shift_b_y = 0.0f;
-        printf("Shift ball y = 0");
+        printf("Shift ball y = 0\n");
     }
     else
     {
-        printf("Shift ball x = 0");
+        printf("Shift ball x = 0\n");
         result->shift_b_x = 0.0f;
     }
     ball->block.position.x += result->shift_b_x;
@@ -169,12 +169,12 @@ static void ball_rebound(Entity *ball, CollosionResult *result, Vector2D *ball_v
 
     if (result->shift_b_x != 0)
     {
-        printf("reverse ball velocity on x");
+        printf("reverse ball velocity on x\n");
         ball_velocity->x = -ball_velocity->x;
     }
     if (result->shift_b_y != 0)
     {
-        printf("reverse ball velocity on y");
+        printf("reverse ball velocity on y\n");
         ball_velocity->y = -ball_velocity->y;
     }
 }
@@ -199,7 +199,7 @@ static void handle_collisions(List *entities, Entity *ball, Vector2D *ball_veloc
     // keep iterator scoped so we can't use it after it's been destroyed
     {
         ListIter *iter;
-        CHECK_SUCCESS(create_iter(entities, &iter), "could not create iterator");
+        CHECK_SUCCESS(create_iter(entities, &iter), "could not create iterator\n");
 
         // move past ball and paddle
         next_node(&iter);
@@ -235,7 +235,7 @@ static void handle_collisions(List *entities, Entity *ball, Vector2D *ball_veloc
 
 int main()
 {
-    printf("hello world\n");
+    printf("Game Starting\n");
 
     Entity paddle = {
         .block = create_block_xy(100.0f, 780.0f, 100.0f, 20.0f), .r = 0xff, .g = 0xff, .b = 0xff};
@@ -245,10 +245,10 @@ int main()
     Vector2D ball_velocity = create_vec_xy(0.2f, 0.2f);
 
     List *entities = NULL;
-    CHECK_SUCCESS(create_list(&entities), "failed to create entity list");
+    CHECK_SUCCESS(create_list(&entities), "failed to create entity list\n");
 
-    CHECK_SUCCESS(push(entities, &paddle), "failed to add paddle to list");
-    CHECK_SUCCESS(push(entities, &ball), "failed to add ball to list");
+    CHECK_SUCCESS(push(entities, &paddle), "failed to add paddle to list\n");
+    CHECK_SUCCESS(push(entities, &ball), "failed to add ball to list\n");
 
     create_brick_row(entities, 50.0f, 0xff, 0x00, 0x00);
     create_brick_row(entities, 80.0f, 0xff, 0x00, 0x00);
@@ -258,11 +258,11 @@ int main()
     create_brick_row(entities, 200.0f, 0x00, 0xff, 0x00);
 
     ListIter *iter = NULL;
-    CHECK_SUCCESS(create_iter(entities, &iter), "failed to get entity iterator");
+    CHECK_SUCCESS(create_iter(entities, &iter), "failed to get entity iterator\n");
 
     // create window
     Window *window;
-    CHECK_SUCCESS(create_window(&window), "failed to create window");
+    CHECK_SUCCESS(create_window(&window), "failed to create window\n");
 
     KeyEvent event;
     bool running = true;
@@ -324,14 +324,14 @@ int main()
 
         // render our scene
 
-        CHECK_SUCCESS(pre_render_window(window), "pre render failed");
+        CHECK_SUCCESS(pre_render_window(window), "pre render failed\n");
 
         while (!is_iter_end(iter))
         {
             Entity *entity = (Entity *)iter_value(iter);
             CHECK_SUCCESS(
                 draw_block_window(window, &entity->block, entity->r, entity->g, entity->b),
-                "failed to render entity");
+                "failed to render entity\n");
 
             next_node(&iter);
         }
